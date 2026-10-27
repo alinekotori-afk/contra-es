@@ -82,6 +82,10 @@
         <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
           Pratique a fusão de preposições com artigos e pronomes através de três dinâmicas interativas: arraste, digitação e múltipla escolha.
         </p>
+        <div class="mt-4 inline-flex items-center gap-2 bg-indigo-900/40 border border-indigo-300/30 px-3.5 py-1.5 rounded-xl text-xs text-indigo-100">
+          <i class="fa-solid fa-comments text-amber-300"></i>
+          <span><strong>Dica da fala cotidiana:</strong> Usamos <em>"pro"</em> (para + o) e <em>"pra"</em> (para + a) no dia a dia informal!</span>
+        </div>
       </div>
       <div class="hidden sm:block absolute -right-6 -bottom-8 opacity-15 text-[180px]">
         <i class="fa-solid fa-book-open"></i>
@@ -173,10 +177,10 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-md">Atividade 3</span>
-            <h3 class="text-xl font-bold text-slate-900">Múltipla Escolha</h3>
+            <h3 class="text-xl font-bold text-slate-900">Múltipla Escolha: Inglês para Português</h3>
           </div>
           <p class="text-xs sm:text-sm text-slate-500 mt-1">
-            Selecione a alternativa correta para cada questionamento gramatical.
+            Escolha a tradução correta para cada frase em inglês, aplicando a contração adequada.
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -219,7 +223,7 @@
 
     // 1. Drag and Drop
     const dndData = [
-      { id: 1, pre: "Eu vou", post: "mercado comprar frutas.", rule: "a + o", answer: "ao" },
+      { id: 1, pre: "Eu vou", post: "mercado comprar frutas.", rule: "para + o (fala)", answer: "pro" },
       { id: 2, pre: "O carro que está na garagem é", post: "amigo do meu pai.", rule: "de + o", answer: "do" },
       { id: 3, pre: "Nós moramos", post: "casa azul da esquina.", rule: "em + a", answer: "na" },
       { id: 4, pre: "Ela caminhou com calma", post: "rua central.", rule: "por + a", answer: "pela" },
@@ -231,7 +235,7 @@
       { id: 10, pre: "Sou muito grato", post: "momentos felizes que vivemos.", rule: "por + os", answer: "pelos" }
     ];
 
-    const wordsPool = ["ao", "do", "na", "pela", "desse", "dele", "nela", "nisso", "numa", "pelos"];
+    const wordsPool = ["pro", "do", "na", "pela", "desse", "dele", "nela", "nisso", "numa", "pelos"];
 
     // 2. Preenchimento de Lacunas
     const fillData = [
@@ -247,62 +251,62 @@
       { id: 10, text: "Eles pensam muito ______ futuro de seus filhos.", hint: "em + o", answer: "no" }
     ];
 
-    // 3. Múltipla Escolha
+    // 3. Múltipla Escolha (Inglês -> Português)
     const quizData = [
       {
         id: 1,
-        question: "Qual é a contração correta para a preposição \"em\" com o pronome demonstrativo \"esse\"?",
+        question: "Como se traduz de forma natural para o português: \"I am going to the supermarket right now\"?",
         options: [
-          { text: "Desse", correct: false },
-          { text: "Nesse", correct: true },
-          { text: "Pesse", correct: false },
-          { text: "Esse", correct: false }
+          { text: "Eu vou pro supermercado agora mesmo.", correct: true },
+          { text: "Eu vou paro supermercado agora mesmo.", correct: false },
+          { text: "Eu vou plo supermercado agora mesmo.", correct: false },
+          { text: "Eu vou por o supermercado agora mesmo.", correct: false }
         ],
-        explanation: "A união de 'em + esse' resulta na contração 'nesse', muito usada para indicar circunstância ou condição."
+        explanation: "Na fala natural do dia a dia, a preposição 'para' com o artigo 'o' contrai como 'pro' ('para + o = pro supermercado')."
       },
       {
         id: 2,
-        question: "Na escrita formal e culta do português, como deve ser grafada a combinação \"para + o\"?",
+        question: "Como se traduz corretamente: \"I completely trust him\"?",
         options: [
-          { text: "pro mercado", correct: false },
-          { text: "paro mercado", correct: false },
-          { text: "para o mercado", correct: true },
-          { text: "plo mercado", correct: false }
+          { text: "Eu confio totalmente dele.", correct: false },
+          { text: "Eu confio totalmente nele.", correct: true },
+          { text: "Eu confio totalmente com ele.", correct: false },
+          { text: "Eu confio totalmente em ele.", correct: false }
         ],
-        explanation: "Na escrita formal, a preposição 'para' NÃO contrai com artigo ('para o'). Formas como 'pro' ou 'pra' são restritas à fala cotidiana."
+        explanation: "O verbo 'confiar' pede a preposição 'em'. A fusão obrigatória de 'em + ele' gera a contração 'nele' ('confio nele')."
       },
       {
         id: 3,
-        question: "Complete a frase: \"Gostei muito ______ conselho que você me deu.\" (de + este)",
+        question: "Como se traduz: \"She lives in a very cozy house\"?",
         options: [
-          { text: "neste", correct: false },
-          { text: "desse", correct: false },
-          { text: "deste", correct: true },
-          { text: "disto", correct: false }
+          { text: "Ela mora em uma casa muito aconchegante.", correct: false },
+          { text: "Ela mora duma casa muito aconchegante.", correct: false },
+          { text: "Ela mora numa casa muito aconchegante.", correct: true },
+          { text: "Ela mora pela casa muito aconchegante.", correct: false }
         ],
-        explanation: "A junção da preposição 'de' com o pronome 'este' gera a contração 'deste'."
+        explanation: "A contração de 'em + uma' resulta em 'numa', amplamente usada para expressar localização com artigo indefinido feminino."
       },
       {
         id: 4,
-        question: "O verbo 'acreditar' exige a preposição 'em'. Qual frase está correta?",
+        question: "Como se traduz: \"I didn't think about that before deciding\"?",
         options: [
-          { text: "Eu acredito dele.", correct: false },
-          { text: "Eu acredito comele.", correct: false },
-          { text: "Eu acredito nele.", correct: true },
-          { text: "Eu acredito por ele.", correct: false }
+          { text: "Eu não pensei disso antes de decidir.", correct: false },
+          { text: "Eu não pensei daquele antes de decidir.", correct: false },
+          { text: "Eu não pensei nisso antes de decidir.", correct: true },
+          { text: "Eu não pensei em esse antes de decidir.", correct: false }
         ],
-        explanation: "A preposição 'em' combinada com o pronome 'ele' resulta na contração 'nele' ('em + ele = nele')."
+        explanation: "O verbo 'pensar' rege a preposição 'em'. A fusão de 'em + isso' forma a contração 'nisso' ('pensar nisso')."
       },
       {
         id: 5,
-        question: "Assinale a alternativa que apresenta um ERRO gramatical de contração:",
+        question: "Como se traduz: \"We walked through the park this morning\"?",
         options: [
-          { text: "Passei pelo caminho mais curto.", correct: false },
-          { text: "Vou comela ao cinema mais tarde.", correct: true },
-          { text: "Ela mora numa casa grande.", correct: false },
-          { text: "O livro que você procura é dele.", correct: false }
+          { text: "Nós caminhamos por o parque hoje de manhã.", correct: false },
+          { text: "Nós caminhamos pelo parque hoje de manhã.", correct: true },
+          { text: "Nós caminhamos pro parque hoje de manhã.", correct: false },
+          { text: "Nós caminhamos no parque hoje de manhã.", correct: false }
         ],
-        explanation: "A preposição 'com' nunca contrai com pronomes pessoais. O correto é sempre escrever de forma separada: 'com ela'."
+        explanation: "Para a ideia de atravessar ou percorrer um lugar com artigo definido ('through the park'), usamos a contração de 'por + o = pelo' ('pelo parque')."
       }
     ];
 
