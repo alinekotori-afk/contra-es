@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prática de Contrações em Português</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .dropzone {
+      min-width: 90px;
+      min-height: 38px;
+      transition: all 0.2s ease;
+    }
+    .dropzone.drag-over {
+      border-color: #3b82f6;
+      background-color: #eff6ff;
+      transform: scale(1.03);
+    }
+    .draggable-chip {
+      touch-action: manipulation;
+      user-select: none;
+      cursor: grab;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .draggable-chip:active {
+      cursor: grabbing;
+      transform: scale(0.96);
+    }
+    .chip-selected {
+      outline: 3px solid #2563eb;
+      background-color: #dbeafe !important;
+      color: #1e40af !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Header / Barra Superior -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-100">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 leading-tight">Contrações em Português</h1>
+          <p class="text-xs text-slate-500">Preposição + Artigo & Pronome • Exercícios Interativos</p>
+        </div>
+      </div>
+
+      <!-- Placar Geral -->
+      <div class="flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-2xl border border-slate-200">
+        <div class="text-right">
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Pontuação Total</span>
+          <span class="text-lg font-black text-indigo-700" id="totalScoreText">0 / 25</span>
+        </div>
+        <button id="resetAllBtn" class="px-3 py-1.5 text-xs font-medium bg-white hover:bg-slate-50 text-slate-600 rounded-lg border border-slate-300 shadow-sm transition flex items-center gap-1.5" title="Reiniciar todos os exercícios">
+          <i class="fa-solid fa-rotate-left"></i> Reiniciar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-5xl mx-auto px-4 py-8 flex-grow space-y-12 w-full">
+
+    <!-- Introdução rápida -->
+    <section class="bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      <div class="relative z-10 max-w-2xl">
+        <span class="bg-white/20 backdrop-blur-sm text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Treinamento Prático</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mt-3 mb-2">Domine as contrações da língua portuguesa!</h2>
+        <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+          Pratique a fusão de preposições com artigos e pronomes através de três dinâmicas interativas: arraste, digitação e múltipla escolha.
+        </p>
+      </div>
+      <div class="hidden sm:block absolute -right-6 -bottom-8 opacity-15 text-[180px]">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 1: Drag & Drop (10 Questões) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-5 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md">Atividade 1</span>
+            <h3 class="text-xl font-bold text-slate-900">Arrastar e Soltar (Drag & Drop)</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Arraste a palavra para o espaço pontilhado <strong>ou toque no card e depois no espaço</strong> para posicionar.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="scoreDnd" class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+            0 / 10 corretas
+          </span>
+        </div>
+      </div>
+
+      <!-- Caixa de Itens Arrastáveis -->
+      <div class="mb-8">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">
+          Banco de Contrações Disponíveis:
+        </label>
+        <div id="wordsContainer" class="flex flex-wrap gap-2.5 p-4 bg-slate-50 rounded-2xl border border-dashed border-slate-300 min-h-[64px] items-center">
+          <!-- Gerado via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Frases / Dropzones -->
+      <div class="space-y-4" id="dndQuestionsList">
+        <!-- Gerado via JavaScript -->
+      </div>
+
+      <!-- Ações do Bloco 1 -->
+      <div class="mt-8 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <button id="checkDndBtn" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-md shadow-blue-100 transition flex items-center gap-2">
+          <i class="fa-solid fa-check"></i> Verificar Atividade 1
+        </button>
+        <button id="resetDndBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-arrows-rotate"></i> Limpar Respostas
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: Completar Lacunas (10 Questões) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-5 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-md">Atividade 2</span>
+            <h3 class="text-xl font-bold text-slate-900">Preenchimento de Lacunas</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Digite a forma correta correspondente à preposição e termo indicados entre parênteses.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="scoreFill" class="text-sm font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+            0 / 10 corretas
+          </span>
+        </div>
+      </div>
+
+      <form id="fillForm" onsubmit="event.preventDefault();" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Gerado via JavaScript -->
+      </form>
+
+      <!-- Ações do Bloco 2 -->
+      <div class="mt-8 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <button id="checkFillBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-md shadow-emerald-100 transition flex items-center gap-2">
+          <i class="fa-solid fa-check"></i> Verificar Atividade 2
+        </button>
+        <button id="resetFillBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-eraser"></i> Limpar Campos
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: Múltipla Escolha (5 Questões) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-5 mb-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-md">Atividade 3</span>
+            <h3 class="text-xl font-bold text-slate-900">Múltipla Escolha</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Selecione a alternativa correta para cada questionamento gramatical.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="scoreQuiz" class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+            0 / 5 corretas
+          </span>
+        </div>
+      </div>
+
+      <div class="space-y-6" id="quizContainer">
+        <!-- Gerado via JavaScript -->
+      </div>
+
+      <!-- Ações do Bloco 3 -->
+      <div class="mt-8 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <button id="checkQuizBtn" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl shadow-md shadow-amber-100 transition flex items-center gap-2">
+          <i class="fa-solid fa-check"></i> Verificar Atividade 3
+        </button>
+        <button id="resetQuizBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Refazer Múltipla Escolha
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12">
+    <p>Material pedagógico baseado no guia prático de <em>Contrações em Português</em>.</p>
+  </footer>
+
+  <!-- Modal / Banner de Mensagem Flutuante (Substituto do alert) -->
+  <div id="feedbackToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-sm px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+    <span id="toastIcon"></span>
+    <span id="toastMsg">Mensagem</span>
+  </div>
+
+  <script>
+    // --- DADOS DOS EXERCÍCIOS ---
+
+    // 1. Drag and Drop
+    const dndData = [
+      { id: 1, pre: "Eu vou", post: "mercado comprar frutas.", rule: "a + o", answer: "ao" },
+      { id: 2, pre: "O carro que está na garagem é", post: "amigo do meu pai.", rule: "de + o", answer: "do" },
+      { id: 3, pre: "Nós moramos", post: "casa azul da esquina.", rule: "em + a", answer: "na" },
+      { id: 4, pre: "Ela caminhou com calma", post: "rua central.", rule: "por + a", answer: "pela" },
+      { id: 5, pre: "Eu realmente não gosto", post: "filme.", rule: "de + esse", answer: "desse" },
+      { id: 6, pre: "Aquele casaco quente é", post: "irmão de Paulo.", rule: "de + ele", answer: "dele" },
+      { id: 7, pre: "Eu confio totalmente", post: ", ela é muito responsável.", rule: "em + ela", answer: "nela" },
+      { id: 8, pre: "Sinceramente, eu não pensei", post: "antes de falar.", rule: "em + isso", answer: "nisso" },
+      { id: 9, pre: "Ela trabalha como professora", post: "escola pública.", rule: "em + uma", answer: "numa" },
+      { id: 10, pre: "Sou muito grato", post: "momentos felizes que vivemos.", rule: "por + os", answer: "pelos" }
+    ];
+
+    const wordsPool = ["ao", "do", "na", "pela", "desse", "dele", "nela", "nisso", "numa", "pelos"];
+
+    // 2. Preenchimento de Lacunas
+    const fillData = [
+      { id: 1, text: "Ontem saí cedo ______ trabalho.", hint: "de + o", answer: "do" },
+      { id: 2, text: "Maria mora ______ apartamento muito espaçoso.", hint: "em + um", answer: "num" },
+      { id: 3, text: "O professor entrou ______ sala e começou a aula.", hint: "em + a", answer: "na" },
+      { id: 4, text: "Nós fomos passear ______ parque pela manhã.", hint: "por + o", answer: "pelo" },
+      { id: 5, text: "Eu não me lembrava ______ lugar até você mostrar as fotos.", hint: "de + aquele", answer: "daquele" },
+      { id: 6, text: "______ situação específica, acho melhor termos cautela.", hint: "em + esta", answer: "nesta" },
+      { id: 7, text: "Esta linda jaqueta de couro é ______ amiga da minha irmã.", hint: "de + ela", answer: "dela" },
+      { id: 8, text: "O sucesso do projeto depende exclusivamente ______ que combinamos.", hint: "de + aquilo", answer: "daquilo" },
+      { id: 9, text: "Chegamos à reunião exatamente ______ 14 horas.", hint: "a + as", answer: "às" },
+      { id: 10, text: "Eles pensam muito ______ futuro de seus filhos.", hint: "em + o", answer: "no" }
+    ];
+
+    // 3. Múltipla Escolha
+    const quizData = [
+      {
+        id: 1,
+        question: "Qual é a contração correta para a preposição \"em\" com o pronome demonstrativo \"esse\"?",
+        options: [
+          { text: "Desse", correct: false },
+          { text: "Nesse", correct: true },
+          { text: "Pesse", correct: false },
+          { text: "Esse", correct: false }
+        ],
+        explanation: "A união de 'em + esse' resulta na contração 'nesse', muito usada para indicar circunstância ou condição."
+      },
+      {
+        id: 2,
+        question: "Na escrita formal e culta do português, como deve ser grafada a combinação \"para + o\"?",
+        options: [
+          { text: "pro mercado", correct: false },
+          { text: "paro mercado", correct: false },
+          { text: "para o mercado", correct: true },
+          { text: "plo mercado", correct: false }
+        ],
+        explanation: "Na escrita formal, a preposição 'para' NÃO contrai com artigo ('para o'). Formas como 'pro' ou 'pra' são restritas à fala cotidiana."
+      },
+      {
+        id: 3,
+        question: "Complete a frase: \"Gostei muito ______ conselho que você me deu.\" (de + este)",
+        options: [
+          { text: "neste", correct: false },
+          { text: "desse", correct: false },
+          { text: "deste", correct: true },
+          { text: "disto", correct: false }
+        ],
+        explanation: "A junção da preposição 'de' com o pronome 'este' gera a contração 'deste'."
+      },
+      {
+        id: 4,
+        question: "O verbo 'acreditar' exige a preposição 'em'. Qual frase está correta?",
+        options: [
+          { text: "Eu acredito dele.", correct: false },
+          { text: "Eu acredito comele.", correct: false },
+          { text: "Eu acredito nele.", correct: true },
+          { text: "Eu acredito por ele.", correct: false }
+        ],
+        explanation: "A preposição 'em' combinada com o pronome 'ele' resulta na contração 'nele' ('em + ele = nele')."
+      },
+      {
+        id: 5,
+        question: "Assinale a alternativa que apresenta um ERRO gramatical de contração:",
+        options: [
+          { text: "Passei pelo caminho mais curto.", correct: false },
+          { text: "Vou comela ao cinema mais tarde.", correct: true },
+          { text: "Ela mora numa casa grande.", correct: false },
+          { text: "O livro que você procura é dele.", correct: false }
+        ],
+        explanation: "A preposição 'com' nunca contrai com pronomes pessoais. O correto é sempre escrever de forma separada: 'com ela'."
+      }
+    ];
+
+    // --- ESTADO GLOBAL DE PONTUAÇÃO ---
+    let scoreStates = {
+      dnd: 0,
+      fill: 0,
+      quiz: 0
+    };
+
+    function updateTotalScore() {
+      const total = scoreStates.dnd + scoreStates.fill + scoreStates.quiz;
+      document.getElementById('totalScoreText').textContent = `${total} / 25`;
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('feedbackToast');
+      const icon = document.getElementById('toastIcon');
+      const msg = document.getElementById('toastMsg');
+
+      msg.textContent = message;
+      if (type === 'success') {
+        icon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>';
+      } else if (type === 'warn') {
+        icon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-400 text-lg"></i>';
+      } else {
+        icon.innerHTML = '<i class="fa-solid fa-info-circle text-blue-400 text-lg"></i>';
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+
+    // ==========================================
+    // 1. LÓGICA DO DRAG & DROP (E CLIQUE TOUCH)
+    // ==========================================
+    let activeSelectedChip = null;
+
+    function initDnD() {
+      const wordsBox = document.getElementById('wordsContainer');
+      const qBox = document.getElementById('dndQuestionsList');
+
+      wordsBox.innerHTML = '';
+      qBox.innerHTML = '';
+
+      // Embaralhar palavras
+      const shuffledWords = [...wordsPool].sort(() => Math.random() - 0.5);
+
+      shuffledWords.forEach((word, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'draggable-chip inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-xl font-medium text-slate-800 shadow-sm text-sm hover:border-blue-400';
+        chip.draggable = true;
+        chip.dataset.word = word;
+        chip.id = `chip-${word}-${index}`;
+        chip.innerHTML = `<span>${word}</span>`;
+
+        // Eventos Drag
+        chip.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', word);
+          e.dataTransfer.setData('chip-id', chip.id);
+          chip.classList.add('opacity-40');
+        });
+
+        chip.addEventListener('dragend', () => {
+          chip.classList.remove('opacity-40');
+        });
+
+        // Clique / Tap para Mobile
+        chip.addEventListener('click', () => {
+          if (activeSelectedChip === chip) {
+            chip.classList.remove('chip-selected');
+            activeSelectedChip = null;
+          } else {
+            if (activeSelectedChip) activeSelectedChip.classList.remove('chip-selected');
+            activeSelectedChip = chip;
+            chip.classList.add('chip-selected');
+            showToast(`"${word}" selecionado. Agora toque no espaço da frase!`, 'info');
+          }
+        });
+
+        wordsBox.appendChild(chip);
+      });
+
+      // Renderizar frases
+      dndData.forEach((item) => {
+        const itemRow = document.createElement('div');
+        itemRow.className = 'p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm sm:text-base flex flex-wrap items-center gap-2 relative';
+        itemRow.innerHTML = `
+          <span class="text-xs font-bold text-slate-400 w-5">#${item.id}</span>
+          <span class="text-slate-700">${item.pre}</span>
+          <div class="dropzone inline-flex items-center justify-center px-3 py-1 rounded-xl border-2 border-dashed border-slate-300 bg-white font-semibold text-blue-700 cursor-pointer min-w-[90px] h-[36px]"
+               data-expected="${item.answer}"
+               data-qid="${item.id}">
+             <span class="placeholder-text text-xs text-slate-400 font-normal select-none">arraste aqui</span>
+          </div>
+          <span class="text-slate-700">${item.post}</span>
+          <span class="ml-auto text-xs font-semibold text-slate-500 bg-slate-200/60 px-2 py-0.5 rounded-md">(${item.rule})</span>
+          <div class="dnd-feedback w-full mt-1 hidden text-xs font-semibold"></div>
+        `;
+        qBox.appendChild(itemRow);
+      });
+
+      setupDropzones();
+    }
+
+    function setupDropzones() {
+      const dropzones = document.querySelectorAll('.dropzone');
+      dropzones.forEach(zone => {
+        // Drag Over
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          zone.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('drag-over');
+        });
+
+        // Drop
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          const droppedWord = e.dataTransfer.getData('text/plain');
+          if (droppedWord) {
+            placeWordInZone(zone, droppedWord);
+          }
+        });
+
+        // Clique / Tap no Dropzone (para Mobile ou acessibilidade)
+        zone.addEventListener('click', () => {
+          if (activeSelectedChip) {
+            const word = activeSelectedChip.dataset.word;
+            placeWordInZone(zone, word);
+            activeSelectedChip.classList.remove('chip-selected');
+            activeSelectedChip = null;
+          } else if (zone.dataset.currentWord) {
+            // Se já tem palavra, clicar remove e limpa
+            clearDropzone(zone);
+          }
+        });
+      });
+    }
+
+    function placeWordInZone(zone, word) {
+      zone.dataset.currentWord = word;
+      zone.innerHTML = `
+        <span class="font-bold text-blue-600">${word}</span>
+        <button class="ml-1.5 text-xs text-slate-400 hover:text-red-500 remove-btn" title="Remover">&times;</button>
+      `;
+      zone.classList.remove('border-dashed');
+      zone.classList.add('border-solid', 'border-blue-400', 'bg-blue-50/40');
+
+      const removeBtn = zone.querySelector('.remove-btn');
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearDropzone(zone);
+      });
+    }
+
+    function clearDropzone(zone) {
+      delete zone.dataset.currentWord;
+      zone.innerHTML = '<span class="placeholder-text text-xs text-slate-400 font-normal select-none">arraste aqui</span>';
+      zone.classList.add('border-dashed', 'border-slate-300');
+      zone.classList.remove('border-solid', 'border-blue-400', 'border-emerald-500', 'border-rose-500', 'bg-blue-50/40', 'bg-emerald-50', 'bg-rose-50');
+      const feedback = zone.parentElement.querySelector('.dnd-feedback');
+      feedback.classList.add('hidden');
+    }
+
+    function checkDnDAnswers() {
+      let correct = 0;
+      const dropzones = document.querySelectorAll('.dropzone');
+
+      dropzones.forEach(zone => {
+        const expected = zone.dataset.expected;
+        const current = (zone.dataset.currentWord || '').trim().toLowerCase();
+        const feedback = zone.parentElement.querySelector('.dnd-feedback');
+
+        feedback.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+        zone.classList.remove('border-blue-400', 'border-emerald-500', 'border-rose-500', 'bg-emerald-50', 'bg-rose-50');
+
+        if (!current) {
+          feedback.textContent = `Aguardando resposta (esperado: "${expected}")`;
+          feedback.classList.add('text-amber-600');
+          zone.classList.add('border-amber-400');
+        } else if (current === expected.toLowerCase()) {
+          correct++;
+          zone.classList.add('border-emerald-500', 'bg-emerald-50');
+          feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Correto!';
+          feedback.classList.add('text-emerald-600');
+        } else {
+          zone.classList.add('border-rose-500', 'bg-rose-50');
+          feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Incorreto. O correto é: <strong>${expected}</strong>`;
+          feedback.classList.add('text-rose-600');
+        }
+      });
+
+      scoreStates.dnd = correct;
+      document.getElementById('scoreDnd').textContent = `${correct} / 10 corretas`;
+      updateTotalScore();
+      showToast(`Atividade 1 verificada: ${correct} de 10 acertos!`, correct >= 7 ? 'success' : 'warn');
+    }
+
+    // ==========================================
+    // 2. LÓGICA DO PREENCHIMENTO (COMPLETAR)
+    // ==========================================
+    function initFill() {
+      const form = document.getElementById('fillForm');
+      form.innerHTML = '';
+
+      fillData.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between gap-2';
+
+        const sentenceParts = item.text.split('______');
+        div.innerHTML = `
+          <div class="text-sm font-medium text-slate-800 leading-relaxed">
+            <span class="text-xs font-bold text-slate-400 mr-1">#${item.id}</span>
+            ${sentenceParts[0]}
+            <input type="text"
+                   name="fill_${item.id}"
+                   data-answer="${item.answer}"
+                   placeholder="..."
+                   autocomplete="off"
+                   autocorrect="off"
+                   spellcheck="false"
+                   class="fill-input inline-block w-24 text-center px-2 py-1 mx-1 font-bold text-emerald-800 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition" />
+            ${sentenceParts[1] || ''}
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-200/60">
+            <span class="text-xs text-slate-500 font-semibold bg-white px-2 py-0.5 rounded border border-slate-200">
+              ${item.hint}
+            </span>
+            <span class="fill-feedback text-xs font-semibold"></span>
+          </div>
+        `;
+        form.appendChild(div);
+      });
+    }
+
+    function checkFillAnswers() {
+      let correct = 0;
+      const inputs = document.querySelectorAll('.fill-input');
+
+      inputs.forEach(input => {
+        const expected = input.dataset.answer.trim().toLowerCase();
+        const userVal = input.value.trim().toLowerCase();
+        const feedback = input.closest('div').parentElement.querySelector('.fill-feedback');
+
+        input.classList.remove('border-emerald-500', 'border-rose-500', 'bg-emerald-50', 'bg-rose-50');
+        feedback.className = 'fill-feedback text-xs font-semibold';
+
+        if (!userVal) {
+          feedback.textContent = `Vazio (correto: ${expected})`;
+          feedback.classList.add('text-amber-600');
+          input.classList.add('border-amber-400');
+        } else if (userVal === expected) {
+          correct++;
+          input.classList.add('border-emerald-500', 'bg-emerald-50');
+          feedback.innerHTML = '<i class="fa-solid fa-check"></i> Correto!';
+          feedback.classList.add('text-emerald-600');
+        } else {
+          input.classList.add('border-rose-500', 'bg-rose-50');
+          feedback.innerHTML = `<i class="fa-solid fa-xmark"></i> Correto: <strong>${expected}</strong>`;
+          feedback.classList.add('text-rose-600');
+        }
+      });
+
+      scoreStates.fill = correct;
+      document.getElementById('scoreFill').textContent = `${correct} / 10 corretas`;
+      updateTotalScore();
+      showToast(`Atividade 2 verificada: ${correct} de 10 acertos!`, correct >= 7 ? 'success' : 'warn');
+    }
+
+    function resetFillAnswers() {
+      const inputs = document.querySelectorAll('.fill-input');
+      inputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('border-emerald-500', 'border-rose-500', 'border-amber-400', 'bg-emerald-50', 'bg-rose-50');
+        const feedback = input.closest('div').parentElement.querySelector('.fill-feedback');
+        feedback.textContent = '';
+      });
+      scoreStates.fill = 0;
+      document.getElementById('scoreFill').textContent = `0 / 10 corretas`;
+      updateTotalScore();
+    }
+
+    // ==========================================
+    // 3. LÓGICA DE MÚLTIPLA ESCOLHA (QUIZ)
+    // ==========================================
+    function initQuiz() {
+      const quizBox = document.getElementById('quizContainer');
+      quizBox.innerHTML = '';
+
+      quizData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'p-5 sm:p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-none hover:border-slate-300 transition quiz-item';
+        card.dataset.qid = item.id;
+
+        let optionsHtml = '';
+        item.options.forEach((opt, optIndex) => {
+          const optId = `q${item.id}_opt${optIndex}`;
+          optionsHtml += `
+            <label for="${optId}" class="quiz-option-label flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-amber-50/50 hover:border-amber-300 transition">
+              <input type="radio"
+                     id="${optId}"
+                     name="question_${item.id}"
+                     value="${opt.correct}"
+                     class="w-4 h-4 text-amber-600 focus:ring-amber-500 border-slate-300" />
+              <span class="text-sm font-medium text-slate-700">${opt.text}</span>
+            </label>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3 mb-4">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+              ${item.id}
+            </span>
+            <h4 class="text-base font-bold text-slate-900 leading-snug">${item.question}</h4>
+          </div>
+          <div class="space-y-2.5">
+            ${optionsHtml}
+          </div>
+          <div class="quiz-feedback hidden mt-4 p-3.5 rounded-xl text-xs sm:text-sm font-medium leading-relaxed"></div>
+        `;
+        quizBox.appendChild(card);
+      });
+    }
+
+    function checkQuizAnswers() {
+      let correct = 0;
+      const quizItems = document.querySelectorAll('.quiz-item');
+
+      quizItems.forEach(card => {
+        const qid = parseInt(card.dataset.qid, 10);
+        const questionData = quizData.find(q => q.id === qid);
+        const selectedRadio = card.querySelector(`input[name="question_${qid}"]:checked`);
+        const feedback = card.querySelector('.quiz-feedback');
+        const labels = card.querySelectorAll('.quiz-option-label');
+
+        feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900', 'bg-amber-100', 'text-amber-900');
+
+        // Resetar estilos das opções
+        labels.forEach(label => {
+          label.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-400', 'bg-rose-50');
+        });
+
+        if (!selectedRadio) {
+          feedback.classList.add('bg-amber-100', 'text-amber-900');
+          feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Responda a esta questão antes de verificar.`;
+          return;
+        }
+
+        const isCorrect = selectedRadio.value === "true";
+
+        if (isCorrect) {
+          correct++;
+          selectedRadio.closest('label').classList.add('border-emerald-500', 'bg-emerald-50');
+          feedback.classList.add('bg-emerald-100', 'text-emerald-900');
+          feedback.innerHTML = `
+            <div class="font-bold text-emerald-800 mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check"></i> Resposta Correta!
+            </div>
+            <div>${questionData.explanation}</div>
+          `;
+        } else {
+          selectedRadio.closest('label').classList.add('border-rose-400', 'bg-rose-50');
+          feedback.classList.add('bg-rose-100', 'text-rose-900');
+          feedback.innerHTML = `
+            <div class="font-bold text-rose-800 mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-xmark"></i> Resposta Incorreta!
+            </div>
+            <div>${questionData.explanation}</div>
+          `;
+        }
+      });
+
+      scoreStates.quiz = correct;
+      document.getElementById('scoreQuiz').textContent = `${correct} / 5 corretas`;
+      updateTotalScore();
+      showToast(`Múltipla Escolha: ${correct} de 5 acertos!`, correct >= 4 ? 'success' : 'warn');
+    }
+
+    function resetQuizAnswers() {
+      const radios = document.querySelectorAll('#quizContainer input[type="radio"]');
+      radios.forEach(r => r.checked = false);
+
+      const labels = document.querySelectorAll('.quiz-option-label');
+      labels.forEach(label => label.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-400', 'bg-rose-50'));
+
+      const feedbacks = document.querySelectorAll('.quiz-feedback');
+      feedbacks.forEach(f => {
+        f.classList.add('hidden');
+        f.innerHTML = '';
+      });
+
+      scoreStates.quiz = 0;
+      document.getElementById('scoreQuiz').textContent = `0 / 5 corretas`;
+      updateTotalScore();
+    }
+
+    // ==========================================
+    // REINICIALIZADOR GERAL E EVENT LISTENERS
+    // ==========================================
+    function resetAll() {
+      initDnD();
+      resetFillAnswers();
+      resetQuizAnswers();
+      scoreStates = { dnd: 0, fill: 0, quiz: 0 };
+      document.getElementById('scoreDnd').textContent = '0 / 10 corretas';
+      updateTotalScore();
+      showToast("Todos os exercícios foram reiniciados com sucesso!", 'info');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Inicializar Seções
+      initDnD();
+      initFill();
+      initQuiz();
+      updateTotalScore();
+
+      // Botões Atividade 1
+      document.getElementById('checkDndBtn').addEventListener('click', checkDnDAnswers);
+      document.getElementById('resetDndBtn').addEventListener('click', () => {
+        initDnD();
+        scoreStates.dnd = 0;
+        document.getElementById('scoreDnd').textContent = '0 / 10 corretas';
+        updateTotalScore();
+        showToast("Atividade 1 reiniciada.", 'info');
+      });
+
+      // Botões Atividade 2
+      document.getElementById('checkFillBtn').addEventListener('click', checkFillAnswers);
+      document.getElementById('resetFillBtn').addEventListener('click', resetFillAnswers);
+
+      // Botões Atividade 3
+      document.getElementById('checkQuizBtn').addEventListener('click', checkQuizAnswers);
+      document.getElementById('resetQuizBtn').addEventListener('click', resetQuizAnswers);
+
+      // Botão Global
+      document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+    });
+  </script>
+</body>
+</html>
